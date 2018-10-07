@@ -613,7 +613,21 @@
 				},
 				selectLevel(item,data,l_index){
 					item.level = l_index + 1;
-					item.lineActive = l_index + 1 
+					item.lineActive = l_index + 1;
+					let hesSelected = false;
+					let tmpIndex = null;
+					this.interestArr.map((data,index) =>{
+						let interestId = Number(data.split('-')[0])
+						let levelId = data.split('-')[1]
+						if(item.id === interestId){
+							hesSelected = true;
+							tmpIndex = index
+						}
+					})
+					if(hesSelected){
+						this.interestArr.splice(tmpIndex,1,item.id+'-'+item.level)	
+					}
+					console.log(this.interestArr)
 				},
 				interestLevelLineOver(i_index,l_index,item){
 					item.lineActive = l_index + 1;
