@@ -1,295 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Document</title>
-	<link rel="stylesheet" type="text/css" href="css/mask.css">
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="css/mask.css">
 </head>
 <body>
-	<div id="warp">
-		<button class="showmask-btn" @click="showFirstTemplete">登录</button>
-		<div class="mask-container" v-if="maskVisible">
-			<div class="maskshield">
-			<div class="step-1-section" v-if="pageOneVisible">
-				<div class="close-btn" @click="closePage">
-					<img src="./images/close.png" alt="logo">
-				</div>	
-				<div class="head-box">
-					<div class="title-container">
-						<p class="title">成为认证学员</p>
-						<p class="title-desc">成为极客学院认证学员，点亮专属身份标识，<span>免费观看</span>全站 80% 以上会员课程。</p>
-					</div>
-					<div class="step-container">
-						第 1 步<span class="total-step"> / 共 3 步</span>
-					</div>
-				</div>
-				<div class="content-box">
-					<div class="list-1">
-						<div class="user-avatar">
-							<img src="./images/head.png" alt="logo">
-						</div>
-						<p class="user-name">{{uname}}</p>
-					</div>
-					<div class="list-2">
-						<div class="user-info-item">
-							<div class="user-sex-item">
-								<span class="button-label">性别：</span>
-								<div class="user-sex-select">
-									<button id="user-sex-btn" class="user-basic-btn" :data-value="gender" @click="openList('sex')">{{gender}}</button>
-									<ul  :class="[arg==='sex'? 'active' : '' , 'user-sex-list']">
-										<li class="user-sex-item" v-for="(item,index) in sexData" @click="selectSex(item)">{{item}}</li>
-									</ul>
-								</div>
-							</div>
-							<div class="user-site-item">
-								<span class="button-label">现居住地：</span>
-								<div class="user-province-select">
-									<button id="user-province-btn" class="user-basic-btn" :data-value="province_id" @click="openList('province')">{{province}}</button>
-									<ul :class="[arg==='province'? 'active' : '' , 'user-province-list']">
-										<li class="user-province-item" v-for="item in data_area.child" :data-value="item.id" @click="selectProvince(item)">{{item.name}}</li>
-									</ul>
-								</div>
-								<div class="user-city-select">
-									<button id="user-city-btn" class="user-basic-btn" data-value="city_id">{{cityValue}}</button>
-									<ul :class="[arg==='city'? 'active' : '' , 'user-city-list']">
-										<li class="user-city-item" v-for="item in cityDataList" :data-value="item.id" @click="selectCity(item)">{{item.name}}</li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						<div class="user-career-item">
-							<span class="button-label">您的当前状态：</span>
-							<div class="user-career-select">
-								<div class="user-student">
-									<div :class="[career_status === 1 ? 'active' : '','button-item']" :data-value="1" @click='getCareerStatus(1)'>学生</div>
-								</div>
-								<div class="user-employee">
-									<div :class="[career_status === 2 ? 'active' : '','button-item']" :data-value="2" @click='getCareerStatus(2)'>在职</div>
-								</div>
-								<div class="user-unemployed">
-									<div :class="[career_status === 3 ? 'active' : '','button-item']" :data-value="3" @click='getCareerStatus(3)'>待业</div>
-								</div>
-							</div>
-						</div>
-						<div class="user-situation-item">
-							<div class="user-grade-select" :style="{'display':career_status == 1 ? 'block' : 'none'}">
-								<button class="user-basic-btn" id="user-grade-btn" :data-value="career_type" @click="openList('grade')">{{gradeTypeValue}}</button>
-								<ul :class="[arg==='grade'? 'active' : '' , 'user-grade-list']">
-									<li class="user-grade-item" v-for="item in degreeData":data-value="item" @click="selectGrade(item)">{{item}}</li>
-								</ul>
-							</div>
-							<div class="user-enrollment-select" :style="{'display':career_status == 1 ? 'block' : 'none'}">
-								<button class="user-basic-btn" id="user-enrollment-btn" :data-value="school_year_enter" @click="openList('schoolYearEnter')">{{schoolYearEnterValue}}</button>
-								<ul :class="[arg==='schoolYearEnter'? 'active' : '' , 'user-enrollment-list']">
-									<li class="user-enrollment-item" v-for="item in schoolYearList" :data-value="item" @click="selectSchoolYear(item)">{{item}}</li>
-								</ul>
-							</div>
-							<div class="user-industry-select" :style="{'display':career_status == 2 ? 'block' : 'none'}">
-								<button class="user-basic-btn" id="user-industry-btn" :data-value="career_type" @click="openList('careerType')">{{careerTypeValue}}</button>
-								<ul :class="[arg==='careerType'? 'active' : '' , 'user-industry-list']">
-									<li class="user-industry-item" v-for="item in careerData" :data-value="item.id" @click="selectCareerType(item)">{{item.name}}</li>
-								</ul>
-							</div>
-							<div class="user-workingyear-select" :style="{'display':career_status == 2 ? 'block' : 'none'}">
-								<button class="user-basic-btn" id="user-workingyear-btn" :data-value="work_experience" @click="openList('workExperience')">{{workExperienceValue}}</button>
-								<ul :class="[arg==='workExperience'? 'active' : '' , 'user-workingyear-list']">
-									<li class="user-workingyear-item" v-for="item in workExperienceData" :data-value="item.id" @click="selectWorkExperience(item)">{{item.name}}</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="check-box">
-					<button  id="next-btn" :class="[nextBtnFirstActive ? 'active':'','next-btn']" @click="showSecondTemplete">下一步</button>
-				</div>
-			</div>
-			<div class="step-2-section" v-if="pageTwoVisible">
-				<div class="close-btn" @click="closePage">
-					<img src="./images/close.png" alt="logo">
-				</div>
-				<div class="head-box">				
-					<div class="title-container">
-						<p class="title">成为认证学员</p>
-						<p class="title-desc">成为极客学院认证学员，点亮专属身份标识，<span>免费观看</span>全站 80% 以上会员课程。</p>
-					</div>
-					<div class="step-container">
-						<span class="current-step">第 2 步</span><span class="total-step"> / 共 3 步</span>
-					</div>
-				</div>
-				<div class="content-box">
-					<p class="type-title">选择你感兴趣的职业方向（最多可选择 3 项）<span>系统将根据您的选择为您推荐合适的课程</span></p>
-					<ul class="type-list">
-						<li v-for="item in InterestData" :data-value="item.item_id" :class="[interest_id.indexOf(item.item_id)>=0 ? 'active' : '' , 'type-item']" @click="selectInterest(item)">{{item.name}}</li>
-					</ul>
-				</div>
-				<div class="check-box">
-					<button class="type-pre-btn" id="type-pre-btn" @click="showFirstTemplete">上一步</button>
-					<button :class="[interestArr.length > 0 ? 'active' : '', 'type-next-btn']" id="type-next-btn" @click="showThirdTemplete">下一步</button>
-				</div>
-			</div>
-			<div class="step-3-section" v-if="pageThreeVisible">
-				<div class="close-btn" @click="closePage">
-					<img src="./images/close.png" alt="logo">
-				</div>
-				<div class="head-box">
-					<div class="title-container">
-						<p class="title">成为认证学员</p>
-						<p class="title-desc">成为极客学院认证学员，点亮专属身份标识，<span>免费观看</span>全站 80% 以上会员课程。</p>
-					</div>
-					<div class="step-container">
-						<span class="current-step">第 3 步</span><span class="total-step"> / 共 3 步</span>
-					</div>
-				</div>
-				<div class="content-box">
-					<p class="level-title">您在这些方向上当前的水平如何？<span>系统将根据您的选择为您推荐合适的课程</span></p>
-					<div class="level-list-container">	
-						<div class="level-list" v-for="(item,i_index) in interestLevel">
-							<p class="list-title">{{item.name}}</p>
-							<ul class="item-level" >
-								<li  
-								v-for="(data,l_index) in levelData" 
-								:class="[l_index + 1 ===  item.level ? 'active' : '' , 'level-select' ]" 
-								:data-id="item.id" 
-								:data-value="l_index" 
-								@click="selectLevel(item,data,l_index)" 
-								@mouseover="interestLevelLineOver(i_index,l_index,item)" @mouseout="interestLevelLineOut(item) ">{{data.name}}</li>
-							</ul>
-							<span :class="[item.lineActive >= 1? 'active' : '' , 'light-1']"></span>
-							<span :class="[item.lineActive >= 2 ? 'active' : '', 'light-2']"></span>
-							<span :class="[item.lineActive >= 3 ? 'active' : '', 'light-3']"></span>
-							<span :class="[item.lineActive >= 4 ? 'active' : '', 'light-4']"></span>
-						</div>
-					</div>
-				</div>
-				<div class="check-box">
-					<button class="level-pre-btn" id="level-pre-btn" @click="preBtnToSecondTemplete">上一步</button>
-					<button :class="[nextBtnThreeActive && 'active']" class="level-apply-btn" id="level-apply-btn" @click="showFourthTemplete">申请认证</button>
-				</div>
-			</div>
-			<div class="binding-section" v-if="pageFourVisible">
-				<div class="close-btn" @click="closePage">
-					<img src="./images/close.png" alt="logo">
-				</div>
-				<div class="head-box">
-					<div class="title-container">
-						<p class="title">绑定手机 完成认证</p>
-						<p class="title-desc">请您绑定手机防止账号丢失和被盗，手机号可用于登录和找回密码。</p>
-					</div>
-				</div>
-				<div class="content-box">
-					<div class="form-phone-number">
-						<input type="text" value placeholder="请输入手机号码" class="phone-number" id="phone-number" name="phone-number" v-model="phoneNumber">
-						<span class="alert-number">{{phoneNumberHint}}</span>
-					</div>
-					<div class="form-verify-code">
-						<input type="text" value placeholder="请输入验证码" class="verify-code" id="verify-code" name="verify-code" v-model="verifyCode">
-						<span class="alert-code">{{verifyCodeHint}}</span>
-						<div class="verify-pic">
-							<img :src="setImgCode" alt="">
-						</div>
-					</div>
-					<div class="form-dynamic-code">
-						<input type="text" value placeholdere="请输入动态码" class="dynamic-code" id="dynamic-code" name="dynamic-code" v-model="dynamicCode">
-						<button type="button"  class="dynamic-code-send" id="dynamic-code-send" name="dynamic-code-send" @click="dynamicCodeSend"
-						:disabled="btnDisabled">{{dynamicCodeHint}}</button>
-					</div>
-				</div>
-				<div class="check-box">
-					<button :class="[nextBtnFourActive && 'active']" class="binding-btn" id="binding-btn" @click="showFifthTemplete">绑定手机</button>
-				</div>
-			</div>
-			<div class="finish-section" v-if="pageFiveVisible">
-				<div class="close-btn" @click="closePage">
-					<img src="./images/close.png" alt="logo">
-				</div>
-				<div class="head-box">
-					<div class="user-avatar">
-						<img :src="pic" alt="logo">
-					</div>
-					<p class="user-name">{{uname}}</p>
-					<p class="title">恭喜，完成认证！</p>
-					<p class="title-desc">现在你可以免费观看 80% 以上会员课程</p>
-					<a href="javascript:;">马上去学习 >></a>
-				</div>
-				<div class="content-box">
-					<p class="recommend">为您推荐如下课程</p>
-					<p class="list-title">职业学院</p>
-					<div class="lesson-list">
-						<div class="lesson-item">
-							<div class="lesson-img">
-								<img src="./images/class.png" alt="logo">
-							</div>
-							<div class="lesson-detail">
-								<p class="lesson-name">Python Web 工程师成长计划</p>
-								<p class="lesson-count">2314 人正在学习</p>
-							</div>
-							<a href="javascript:;"></a>
-						</div>
-						<div class="lesson-item">
-							<div class="lesson-img">
-								<img src="./images/class.png" alt="logo">
-							</div>
-							<div class="lesson-detail">
-								<p class="lesson-name">Go 工程师成长计划</p>
-								<p class="lesson-count">2314 人正在学习</p>
-							</div>
-							<a href="javascript:;"></a>
-						</div>
-					</div>
-					<p class="list-title">会员课程</p>
-					<div class="member-list">
-						<li class="list-item"><a href="javascript:;">Tornado 开发--TCP 编程</a></li>
-						<li class="list-item"><a href="javascript:;">开发远程控制程序高级功能</a></li>
-						<li class="list-item"><a href="javascript:;">网页控制电脑</a></li>
-						<li class="list-item"><a href="javascript:;">Python 类深入</a></li>
-						<li class="list-item"><a href="javascript:;">Python 类初步</a></li>
-						<li class="list-item"><a href="javascript:;">Python 初级项目：远程操控电脑</a></li>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script src="https://lib.baomitu.com/vue/2.5.17-beta.0/vue.min.js"></script>
-	<script type="text/javascript" src="./js/data_area.js"></script>
-	<script type="text/javascript">
-		const PAGE = new Vue ({
-			el: '#warp',
-			data:{
-				maskVisible:false,   //是否显示遮罩
-				pageOneVisible:false,//是否显示第一页
-				pageTwoVisible:false,//是否显示第二页
-				pageThreeVisible:false, //是否显示第三页
-				pageFourVisible:false, //是否显示第四页
-				pageFiveVisible:false, //是否显示第五页
-				arg:null,            //列表参数
-				uname:"Jax",          //姓名
-	            pic:"./images/head.png",//头像
-	            phone_status:0,      //手机是否认证
-	            gender: null,       //性别
-	            province:'省',       //省text
-	            province_id:2,       //省ID
-	            city_id:36,          //市ID
-	            career_status:2,    //职业状态,1-学生、2-在职、3-待业
-	            grade_type: "专科",      //职业类型,学生:初中、高中、大学;
-	            career_type: "技术",     //在职:产品、前端、后端;
-	            work_experience: 2,  //工作年限
-	            school_year_enter: 2018,//入学年份
-	            career_interest:"114-1|115-3",  //职业方向＋水平 eg:114-1|115-3
-	            interestArr:[],          //临时存放用户选择职业方向数据
-	            interest_id:[], 		 //临时存放用户选择职业方向id
-	            interestLevel: [],       //最终存放用户选择职业方向和程度数据
-	            phoneNumber:null,        //表单手机号码
-	          	verifyCode:null,		//表单验证码
-	          	dynamicCode:null,       //表单动态码
-	            phoneNumberHint:'',		//手机号码输入提示
-	            verifyCodeHint:'',		//验证码输入提示
-	            dynamicCodeHint:'获取',     //动态码提示
-	            btnDisabled:false,
-	            sexData:["男","女","保密"],
-	            //学历数据
-	            degreeData:['高中及以下','专科','大学本科','研究生及以上'],
-        		careerData:[{
-        			id: 1,
+    <div id="warp">
+        <button class="showmask-btn" @click="showFirstTemplete">登录</button>
+        <div class="mask-container" v-if="maskVisible">
+            <div class="maskshield">
+            <div class="step-1-section" v-if="pageVisible === 1">
+                <div class="close-btn" @click="closePage">
+                    <img src="./images/close.png" alt="logo">
+                </div>  
+                <div class="head-box">
+                    <div class="title-container">
+                        <p class="title">成为认证学员</p>
+                        <p class="title-desc">成为极客学院认证学员，点亮专属身份标识，<span>免费观看</span>全站 80% 以上会员课程。</p>
+                    </div>
+                    <div class="step-container">
+                        第 1 步<span class="total-step"> / 共 3 步</span>
+                    </div>
+                </div>
+                <div class="content-box">
+                    <div class="list-1">
+                        <div class="user-avatar">
+                            <img src="./images/head.png" alt="logo">
+                        </div>
+                        <p class="user-name">{{uname}}</p>
+                    </div>
+                    <div class="list-2">
+                        <div class="user-info-item">
+                            <div class="user-sex-item">
+                                <span class="button-label">性别：</span>
+                                <div class="user-sex-select">
+                                    <button id="user-sex-btn" class="user-basic-btn" :data-value="gender" @click="openList('sex')">{{gender}}</button>
+                                    <ul  :class="[selectVisible==='sex'? 'active' : '' , 'user-sex-list']">
+                                        <li class="user-sex-item" v-for="(item,index) in sexData" @click="selectSex(item)">{{item}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="user-site-item">
+                                <span class="button-label">现居住地：</span>
+                                <div class="user-province-select">
+                                    <button id="user-province-btn" class="user-basic-btn" :data-value="province_id" @click="openList('province')">{{province}}</button>
+                                    <ul :class="[selectVisible==='province'? 'active' : '' , 'user-province-list']">
+                                        <li class="user-province-item" v-for="item in data_area.child" :data-value="item.id" @click="selectProvince(item)">{{item.name}}</li>
+                                    </ul>
+                                </div>
+                                <div class="user-city-select">
+                                    <button id="user-city-btn" class="user-basic-btn" data-value="city_id">{{cityValue}}</button>
+                                    <ul :class="[selectVisible==='city'? 'active' : '' , 'user-city-list']">
+                                        <li class="user-city-item" v-for="item in cityDataList" :data-value="item.id" @click="selectCity(item)">{{item.name}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="user-career-item">
+                            <span class="button-label">您的当前状态：</span>
+                            <div class="user-career-select">
+                                <div class="user-student">
+                                    <div :class="[career_status === 1 ? 'active' : '','button-item']" :data-value="1" @click='getCareerStatus(1)'>学生</div>
+                                </div>
+                                <div class="user-employee">
+                                    <div :class="[career_status === 2 ? 'active' : '','button-item']" :data-value="2" @click='getCareerStatus(2)'>在职</div>
+                                </div>
+                                <div class="user-unemployed">
+                                    <div :class="[career_status === 3 ? 'active' : '','button-item']" :data-value="3" @click='getCareerStatus(3)'>待业</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="user-situation-item">
+                            <div class="user-grade-select" :style="{'display':career_status == 1 ? 'block' : 'none'}">
+                                <button class="user-basic-btn" id="user-grade-btn" :data-value="career_type" @click="openList('grade')">{{grade_type || '你所在年级'}}</button>
+                                <ul :class="[selectVisible==='grade'? 'active' : '' , 'user-grade-list']">
+                                    <li class="user-grade-item" v-for="item in degreeData":data-value="item" @click="selectGrade(item)">{{item}}</li>
+                                </ul>
+                            </div>
+                            <div class="user-enrollment-select" :style="{'display':career_status == 1 ? 'block' : 'none'}">
+                                <button class="user-basic-btn" id="user-enrollment-btn" :data-value="school_year_enter" @click="openList('schoolYearEnter')">{{school_year_enter || "入学年份"}}</button>
+                                <ul :class="[selectVisible==='schoolYearEnter'? 'active' : '' , 'user-enrollment-list']">
+                                    <li class="user-enrollment-item" v-for="item in schoolYearList" :data-value="item" @click="selectSchoolYear(item)">{{item}}</li>
+                                </ul>
+                            </div>
+                            <div class="user-industry-select" :style="{'display':career_status == 2 ? 'block' : 'none'}">
+                                <button class="user-basic-btn" id="user-industry-btn" :data-value="career_type" @click="openList('careerType')">{{career_type || "您所从事的职业"}}</button>
+                                <ul :class="[selectVisible==='careerType'? 'active' : '' , 'user-industry-list']">
+                                    <li class="user-industry-item" v-for="item in careerData" :data-value="item.id" @click="selectCareerType(item)">{{item.name}}</li>
+                                </ul>
+                            </div>
+                            <div class="user-workingyear-select" :style="{'display':career_status == 2 ? 'block' : 'none'}">
+                                <button class="user-basic-btn" id="user-workingyear-btn" :data-value="work_experience" @click="openList('workExperience')">{{workExperienceValue}}</button>
+                                <ul :class="[selectVisible==='workExperience'? 'active' : '' , 'user-workingyear-list']">
+                                    <li class="user-workingyear-item" v-for="item in workExperienceData" :data-value="item.id" @click="selectWorkExperience(item)">{{item.name}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="check-box">
+                    <button  id="next-btn" :class="[nextBtnFirstActive ? 'active':'','next-btn']" @click="showSecondTemplete">下一步</button>
+                </div>
+            </div>
+            <div class="step-2-section" v-if="pageVisible === 2">
+                <div class="close-btn" @click="closePage">
+                    <img src="./images/close.png" alt="logo">
+                </div>
+                <div class="head-box">              
+                    <div class="title-container">
+                        <p class="title">成为认证学员</p>
+                        <p class="title-desc">成为极客学院认证学员，点亮专属身份标识，<span>免费观看</span>全站 80% 以上会员课程。</p>
+                    </div>
+                    <div class="step-container">
+                        <span class="current-step">第 2 步</span><span class="total-step"> / 共 3 步</span>
+                    </div>
+                </div>
+                <div class="content-box">
+                    <p class="type-title">选择你感兴趣的职业方向（最多可选择 3 项）<span>系统将根据您的选择为您推荐合适的课程</span></p>
+                    <ul class="type-list">
+                        <li v-for="item in InterestData" :data-value="item.item_id" :class="[interest_id.indexOf(item.item_id)>=0 ? 'active' : '' , 'type-item']" @click="selectInterest(item)">{{item.name}}</li>
+                    </ul>
+                </div>
+                <div class="check-box">
+                    <button class="type-pre-btn" id="type-pre-btn" @click="showFirstTemplete">上一步</button>
+                    <button :class="[interestArr.length > 0 ? 'active' : '', 'type-next-btn']" id="type-next-btn" @click="showThirdTemplete">下一步</button>
+                </div>
+            </div>
+            <div class="step-3-section" v-if="pageVisible === 3">
+                <div class="close-btn" @click="closePage">
+                    <img src="./images/close.png" alt="logo">
+                </div>
+                <div class="head-box">
+                    <div class="title-container">
+                        <p class="title">成为认证学员</p>
+                        <p class="title-desc">成为极客学院认证学员，点亮专属身份标识，<span>免费观看</span>全站 80% 以上会员课程。</p>
+                    </div>
+                    <div class="step-container">
+                        <span class="current-step">第 3 步</span><span class="total-step"> / 共 3 步</span>
+                    </div>
+                </div>
+                <div class="content-box">
+                    <p class="level-title">您在这些方向上当前的水平如何？<span>系统将根据您的选择为您推荐合适的课程</span></p>
+                    <div class="level-list-container">  
+                        <div class="level-list" v-for="(item,i_index) in interestLevel">
+                            <p class="list-title">{{item.name}}</p>
+                            <ul class="item-level" >
+                                <li  
+                                v-for="(data,l_index) in levelData" 
+                                :class="[l_index + 1 ===  item.level ? 'active' : '' , 'level-select' ]" 
+                                :data-id="item.id" 
+                                :data-value="l_index" 
+                                @click="selectLevel(item,data,l_index)" 
+                                @mouseover="interestLevelLineOver(i_index,l_index,item)" @mouseout="interestLevelLineOut(item) ">{{data.name}}</li>
+                            </ul>
+                            <span :class="[item.lineActive >= 1? 'active' : '' , 'light-1']"></span>
+                            <span :class="[item.lineActive >= 2 ? 'active' : '', 'light-2']"></span>
+                            <span :class="[item.lineActive >= 3 ? 'active' : '', 'light-3']"></span>
+                            <span :class="[item.lineActive >= 4 ? 'active' : '', 'light-4']"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="check-box">
+                    <button class="level-pre-btn" id="level-pre-btn" @click="preBtnToSecondTemplete">上一步</button>
+                    <button :class="[nextBtnThreeActive && 'active']" class="level-apply-btn" id="level-apply-btn" @click="showFourthTemplete">申请认证</button>
+                </div>
+            </div>
+            <div class="binding-section" v-if="pageVisible === 4">
+                <div class="close-btn" @click="closePage">
+                    <img src="./images/close.png" alt="logo">
+                </div>
+                <div class="head-box">
+                    <div class="title-container">
+                        <p class="title">绑定手机 完成认证</p>
+                        <p class="title-desc">请您绑定手机防止账号丢失和被盗，手机号可用于登录和找回密码。</p>
+                    </div>
+                </div>
+                <div class="content-box">
+                    <div class="form-phone-number">
+                        <input type="text" value placeholder="请输入手机号码" class="phone-number" id="phone-number" name="phone-number" v-model="phoneNumber">
+                        <span class="alert-number">{{phoneNumberHint}}</span>
+                    </div>
+                    <div class="form-verify-code">
+                        <input type="text" value placeholder="请输入验证码" class="verify-code" id="verify-code" name="verify-code" v-model="verifyCode">
+                        <span class="alert-code">{{verifyCodeHint}}</span>
+                        <div class="verify-pic">
+                            <img :src="setImgCode" alt="">
+                        </div>
+                    </div>
+                    <div class="form-dynamic-code">
+                        <input type="text" value placeholdere="请输入动态码" class="dynamic-code" id="dynamic-code" name="dynamic-code" v-model="dynamicCode">
+                        <button type="button"  class="dynamic-code-send" id="dynamic-code-send" name="dynamic-code-send" @click="dynamicCodeSend"
+                        :disabled="dynamicCodeBtnDisabled">{{dynamicCodeHint}}</button>
+                    </div>
+                </div>
+                <div class="check-box">
+                    <button :class="[nextBtnFourActive && 'active']" class="binding-btn" id="binding-btn" @click="showFifthTemplete">绑定手机</button>
+                </div>
+            </div>
+            <div class="finish-section" v-if="pageVisible === 5">
+                <div class="close-btn" @click="closePage">
+                    <img src="./images/close.png" alt="logo">
+                </div>
+                <div class="head-box">
+                    <div class="user-avatar">
+                        <img :src="pic" alt="logo">
+                    </div>
+                    <p class="user-name">{{uname}}</p>
+                    <p class="title">恭喜，完成认证！</p>
+                    <p class="title-desc">现在你可以免费观看 80% 以上会员课程</p>
+                    <a href="javascript:;">马上去学习 >></a>
+                </div>
+                <div class="content-box">
+                    <p class="recommend">为您推荐如下课程</p>
+                    <p class="list-title">职业学院</p>
+                    <div class="lesson-list">
+                        <div class="lesson-item">
+                            <div class="lesson-img">
+                                <img src="./images/class.png" alt="logo">
+                            </div>
+                            <div class="lesson-detail">
+                                <p class="lesson-name">Python Web 工程师成长计划</p>
+                                <p class="lesson-count">2314 人正在学习</p>
+                            </div>
+                            <a href="javascript:;"></a>
+                        </div>
+                        <div class="lesson-item">
+                            <div class="lesson-img">
+                                <img src="./images/class.png" alt="logo">
+                            </div>
+                            <div class="lesson-detail">
+                                <p class="lesson-name">Go 工程师成长计划</p>
+                                <p class="lesson-count">2314 人正在学习</p>
+                            </div>
+                            <a href="javascript:;"></a>
+                        </div>
+                    </div>
+                    <p class="list-title">会员课程</p>
+                    <div class="member-list">
+                        <li class="list-item"><a href="javascript:;">Tornado 开发--TCP 编程</a></li>
+                        <li class="list-item"><a href="javascript:;">开发远程控制程序高级功能</a></li>
+                        <li class="list-item"><a href="javascript:;">网页控制电脑</a></li>
+                        <li class="list-item"><a href="javascript:;">Python 类深入</a></li>
+                        <li class="list-item"><a href="javascript:;">Python 类初步</a></li>
+                        <li class="list-item"><a href="javascript:;">Python 初级项目：远程操控电脑</a></li>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://lib.baomitu.com/vue/2.5.17-beta.0/vue.min.js"></script>
+    <script type="text/javascript" src="./js/data_area.js"></script>
+    <script type="text/javascript">
+        const PAGE = new Vue ({
+            el: '#warp',
+            data:{
+                maskVisible:false,      //是否显示遮罩
+                pageVisible:0,
+                pageOneVisible:false,   //是否显示第一页
+                pageTwoVisible:false,   //是否显示第二页
+                pageThreeVisible:false, //是否显示第三页
+                pageFourVisible:false,  //是否显示第四页
+                pageFiveVisible:false,  //是否显示第五页
+                selectVisible:null,     //列表参数
+                uname:"Jax",            //姓名
+                pic:"./images/head.png",//头像
+                phone_status:0,         //手机是否认证
+                gender: "保密",           //性别
+                province:'省',           //省text
+                province_id:2,          //省ID
+                city_id:36,             //市ID
+                career_status:2,        //职业状态,1-学生、2-在职、3-待业
+                grade_type: "专科",       //职业类型,学生:初中、高中、大学;
+                career_type: "技术",      //在职:产品、前端、后端;
+                work_experience: 2,     //工作年限
+                school_year_enter: 2018,//入学年份
+                career_interest:"114-1|115-3",  //职业方向＋水平 eg:114-1|115-3
+                interestArr:[],         //临时存放用户选择职业方向数据
+                interest_id:[],         //临时存放用户选择职业方向id
+                interestLevel: [],      //最终存放用户选择职业方向和程度数据
+                phoneNumber:null,       //表单手机号码
+                verifyCode:null,        //表单验证码
+                dynamicCode:null,       //表单动态码
+                phoneNumberHint:'',     //手机号码输入提示
+                verifyCodeHint:'',      //验证码输入提示
+                dynamicCodeHint:'获取',   //动态码提示
+                dynamicCodeBtnDisabled:false,   //动态码按钮不可用
+                //性别数据
+                sexData:["男","女","保密"],
+                //学历数据
+                degreeData:['高中及以下','专科','大学本科','研究生及以上'],
+                careerData:[{
+                    id: 1,
                     name: '技术'
                 },{
                     id: 2,
@@ -304,381 +306,352 @@
                     id: 5,
                     name: '运营'
                 },{
-                	id:6,
-                	name: '其他'
+                    id:6,
+                    name: '其他'
                 }],
-	            // 工作年限制数据
-	            workExperienceData: [{
-	                id: 1,
-	                name: '1年以下'
-	            },{
-	                id: 2,
-	                name: '1-2年'
-	            },{
-	                id: 3,
-	                name: '3-5年'
-	            },{
-	                id: 4,
-	                name: '6-10年'
-	            },{
-	                id: 5,
-	                name: '10年以上'
-	            }],
-	            //存放职业方向接口的数据
-	            InterestData:[{
-	                item_id: 114,
-	                name: 'Web 前端工程师'
-	            },{
-	                item_id: 115,
-	                name: 'Python Web 工程师'
-	            },{
-	                item_id: 116,
-	                name: 'GO 语言工程师'
-	            },{
-	                item_id: 117,
-	                name: 'Java Web 工程师'
-	            },{
-	                item_id: 118,
-	                name: 'PHP 工程师'
-	            },{
-	                item_id: 119,
-	                name: 'Android 开发工程师'
-	            },{
-	                item_id: 120,
-	                name: 'iOS 开发工程师'
-	            }],
-	            levelData:[{
-	            	id:1,
-	            	name:'完全不了解'
-	            },{
-	            	id:2,
-	            	name:'有点了解'
-	            },{
-	            	id:3,
-	            	name:'熟悉'
-	            },{
-	            	id:4,
-	            	name:'精通'
-	            }],
-			},
-			computed:{
-				//获取城市的值
-				cityValue(){
-					//城市的取值分两种情况，一是默认的值，
-					//二是根据点击城市列表city_id不为null时，城市取值改变
-					let city = '';
-					let province_id = this.province_id;
-					let city_id = this.city_id;
-					if (city_id === null) {
-						city = '市';
-					} else {
-						let provinceData = data_area.child.filter( data => data.id == province_id)[0];
-						let cityData = provinceData.child.filter(item => item.id == city_id)[0];
-						city = cityData ? cityData.name : '市';
-						console.log(cityData ? cityData.name : '市' )
-					}
-					return city
-				},
-				//获取所在年级的值
-				gradeTypeValue(){
-					let gradeType = this.grade_type || '你所在年级'
-					return gradeType
-				},
-				//获取入学年份的值
-				schoolYearEnterValue(){
-					let schoolYearEnter = this.school_year_enter || "入学年份"
-					return schoolYearEnter
-				},
-				//获取职业的值
-				careerTypeValue(){
-					let careerType =  this.career_type || "您所从事的职业";
-					return careerType
-				},
-				//获取工作年限的值
-				workExperienceValue(){
-					let workExperience = '';
-					let work_experience = this.work_experience;
-					if(work_experience == null){
-						workExperience = '工作年限'
-					}else{
-						let  workExperienceData = this.workExperienceData.filter(data => data.id == work_experience)[0];
-						workExperience = workExperienceData ? workExperienceData.name : '工作年限'
-					}
-					return workExperience
-				},
-				//获取城市列表，根据省份id的值获取
-				cityDataList(){
-					let province_id = this.province_id;
-					let provinceData = data_area.child.filter( data => data.id == province_id)[0];
-					this.province = provinceData.name;
-					return provinceData.child
-				},
-				//获取入学年份列表
-				schoolYearList(){
-					let schoolYear = []
-					let startDate = 1976;
-					let endDate = new Date().getUTCFullYear();
-					for(let i = endDate;i > startDate;i--){
-						schoolYear.push(i)
-					}
-					return schoolYear
-				},
-				//判断下一步按钮是否添加active
-				nextBtnFirstActive(){
-					let btnClassActive = false;
-					let hasGender = this.gender !== null;
-					let	hasProvinceId = this.province_id !== null;
-					let	hasCityId = this.city_id !== null;
-					let infoHasValue = hasGender && hasProvinceId && hasCityId;
-					let	career_status = this.career_status;
-					if(infoHasValue && career_status == 3){
-						btnClassActive = true;
-					}else if(infoHasValue && career_status == 2){
-						if(this.career_type && this.work_experience){
-							btnClassActive = true;
-						}
-					}else if(infoHasValue && career_status == 1){
-						if(this.grade_type && this.school_year_enter){
-							btnClassActive = true;
-						}
-					}
-					return btnClassActive
-				},
-				nextBtnThreeActive(){
-					let active =  this.interestLevel.every(item => item.level > 0);
-					console.log(active);
-					return active
-				},
-				nextBtnFourActive(){
-					return this.dynamicCode !== null
-				},
-				setImgCode(){
-					let getImgCodeUrl = 'https://huodong.jikexueyuan.com/jike1024/verifyCode';
-		            var imgCode = getImgCodeUrl+ '?' + new Date().getTime();
-		            return imgCode;
-				},
-				updateCareerInterest(){
-					//career_interest:"114-1|115-3"
-					let html = this.interestLevel.map(data =>{
-						return data.id + '-' + data.level
-					})
-					return html
-				}
-			},
-			methods:{
-				showFirstTemplete(){
-					this.maskVisible = true;
-					this.pageOneVisible = true;
-					this.pageTwoVisible = false;
-					this.pageThreeVisible = false;
-					this.pageFourVisible = false;
-					this.pageFiveVisible = false;
-				},
-				showSecondTemplete(){
-					if(this.nextBtnFirstActive){
-						this.pageOneVisible = false;
-						this.pageTwoVisible = true;
-					}
-					if(this.pageTwoVisible && this.career_interest){
-						let interestArr = this.career_interest.split('|');
-						let interest_id = interestArr.map(data => Number(data.split('-')[0]));
-						this.interestArr = interestArr;
-						this.interest_id = interest_id;		
-					}
-				},
-				preBtnToSecondTemplete(){
-					this.interest_id = this.interestArr.map(data => Number(data.split('-')[0]));
-					this.pageTwoVisible = true;
-					this.pageThreeVisible = false;
-				},
-				getInterestLevel(){
-					let	interestArr = this.interestArr;
-					let InterestData = this.InterestData;
-					let outcome = [];
-					InterestData.forEach(data => {
-						interestArr.map(item =>{
-							let interestId = item.split('-')[0]
-							let levelId = item.split('-')[1]
-							if(data.item_id == interestId){
-								let obj = {};
-								obj.name = data.name;
-								obj.id = data.item_id;
-								obj.level = Number(levelId);
-								obj.lineActive = Number(levelId);
-								outcome.push(obj);
-								return outcome						
-							}
-						})
-					})
-					console.log(outcome)
-					return  outcome
-				},
-				showThirdTemplete(){
-					if(this.interestArr.length > 0){
-						this.pageTwoVisible = false;
-						this.pageThreeVisible = true;
-						this.interestLevel = this.getInterestLevel();
-					}
-					this.updateCareerInterest();
+                // 工作年限制数据
+                workExperienceData: [{
+                    id: 1,
+                    name: '1年以下'
+                },{
+                    id: 2,
+                    name: '1-2年'
+                },{
+                    id: 3,
+                    name: '3-5年'
+                },{
+                    id: 4,
+                    name: '6-10年'
+                },{
+                    id: 5,
+                    name: '10年以上'
+                }],
+                //存放职业方向接口的数据
+                InterestData:[{
+                    item_id: 114,
+                    name: 'Web 前端工程师'
+                },{
+                    item_id: 115,
+                    name: 'Python Web 工程师'
+                },{
+                    item_id: 116,
+                    name: 'GO 语言工程师'
+                },{
+                    item_id: 117,
+                    name: 'Java Web 工程师'
+                },{
+                    item_id: 118,
+                    name: 'PHP 工程师'
+                },{
+                    item_id: 119,
+                    name: 'Android 开发工程师'
+                },{
+                    item_id: 120,
+                    name: 'iOS 开发工程师'
+                }],
+                levelData:[{
+                    id:1,
+                    name:'完全不了解'
+                },{
+                    id:2,
+                    name:'有点了解'
+                },{
+                    id:3,
+                    name:'熟悉'
+                },{
+                    id:4,
+                    name:'精通'
+                }],
+            },
+            computed:{
+                //获取城市的值
+                cityValue(){
+                    //城市的取值分两种情况，一是默认的值，
+                    //二是根据点击城市列表city_id不为null时，城市取值改变
+                    let city = '';
+                    let province_id = this.province_id;
+                    let city_id = this.city_id;
+                    if (city_id === null) {
+                        city = '市';
+                    } else {
+                        let provinceData = data_area.child.filter( data => data.id == province_id)[0];
+                        let cityData = provinceData.child.filter(item => item.id == city_id)[0];
+                        city = cityData ? cityData.name : '市';
+                    }
+                    return city
+                },
+                //获取工作年限的值
+                workExperienceValue(){
+                    let workExperience = '';
+                    let work_experience = this.work_experience;
+                    if(work_experience == null){
+                        workExperience = '工作年限'
+                    }else{
+                        let  workExperienceData = this.workExperienceData.filter(data => data.id == work_experience)[0];
+                        workExperience = workExperienceData ? workExperienceData.name : '工作年限'
+                    }
+                    return workExperience
+                },
+                //获取城市列表，根据省份id的值获取
+                cityDataList(){
+                    let province_id = this.province_id;
+                    let provinceData = data_area.child.filter( data => data.id == province_id)[0];
+                    this.province = provinceData.name;
+                    return provinceData.child
+                },
+                //获取入学年份列表
+                schoolYearList(){
+                    let schoolYear = []
+                    let startDate = 1976;
+                    let endDate = new Date().getUTCFullYear();
+                    for(let i = endDate;i > startDate;i--){
+                        schoolYear.push(i)
+                    }
+                    return schoolYear
+                },
+                //判断下一步按钮是否添加active
+                nextBtnFirstActive(){
+                    let btnClassActive = false;
+                    let hasGender = this.gender !== null;
+                    let hasProvinceId = this.province_id !== null;
+                    let hasCityId = this.city_id !== null;
+                    let infoHasValue = hasGender && hasProvinceId && hasCityId;
+                    let career_status = this.career_status;
+                    if(infoHasValue && career_status == 3){
+                        btnClassActive = true;
+                    }else if(infoHasValue && career_status == 2){
+                        if(this.career_type && this.work_experience){
+                            btnClassActive = true;
+                        }
+                    }else if(infoHasValue && career_status == 1){
+                        if(this.grade_type && this.school_year_enter){
+                            btnClassActive = true;
+                        }
+                    }
+                    return btnClassActive
+                },
+                nextBtnThreeActive(){
+                    let active =  this.interestLevel.every(item => item.level > 0);
+                    return active
+                },
+                nextBtnFourActive(){
+                    return this.dynamicCode !== null
+                },
+                setImgCode(){
+                    let getImgCodeUrl = 'https://huodong.jikexueyuan.com/jike1024/verifyCode';
+                    var imgCode = getImgCodeUrl+ '?' + new Date().getTime();
+                    return imgCode;
+                },
+                updateCareerInterest(){
+                    //career_interest:"114-1|115-3"
+                    let html = this.interestLevel.map(data =>{
+                        return data.id + '-' + data.level
+                    })
+                    return html
+                }
+            },
+            methods:{
+                showFirstTemplete(){
+                    this.maskVisible = true;
+                    this.pageVisible = 1;
+                },
+                showSecondTemplete(){
+                    if(this.nextBtnFirstActive){
+                        this.pageVisible = 2;
+                    }
+                    if(this.pageVisible === 2 && this.career_interest){
+                        let interestArr = this.career_interest.split('|');
+                        let interest_id = interestArr.map(data => Number(data.split('-')[0]));
+                        this.interestArr = interestArr;
+                        this.interest_id = interest_id;     
+                    }
+                },
+                preBtnToSecondTemplete(){
+                    this.interest_id = this.interestArr.map(data => Number(data.split('-')[0]));
+                    this.pageVisible = 2;
+                },
+                getInterestLevel(){
+                    let interestArr = this.interestArr;
+                    let InterestData = this.InterestData;
+                    let outcome = [];
+                    InterestData.forEach(data => {
+                        interestArr.forEach(item =>{
+                            let interestId = item.split('-')[0]
+                            let levelId = item.split('-')[1]
+                            if(data.item_id == interestId){
+                                let obj = {};
+                                obj.name = data.name;
+                                obj.id = data.item_id;
+                                obj.level = Number(levelId);
+                                obj.lineActive = Number(levelId);
+                                outcome.push(obj);
+                                return outcome                      
+                            }
+                        })
+                    })
+                    return  outcome
+                },
+                showThirdTemplete(){
+                    if(this.interestArr.length > 0){
+                        this.pageVisible = 3;
+                        this.interestLevel = this.getInterestLevel();
+                    }
+                    this.updateCareerInterest();
 
-				},
-				updateCareerInterest(){
-					//career_interest:"114-1|115-3"
-					let html = this.interestLevel.map(data =>{
-						return data.id + '-' + data.level
-					}).join('|')
+                },
+                updateCareerInterest(){
+                    //career_interest:"114-1|115-3"
+                    let html = this.interestLevel.map(data =>{
+                        return data.id + '-' + data.level
+                    }).join('|')
 
-					this.career_interest = html;
-				},
-				showFourthTemplete(){
-					if(this.nextBtnThreeActive){
-						this.pageThreeVisible = false;
-						this.pageFourVisible = true
-					}
-				},
-				showFifthTemplete(){
-					if(this.nextBtnFourActive){
-						this.pageFourVisible = false;
-						this.pageFiveVisible = true
-					}
-				},
-				closePage(e){
-					this.maskVisible = false;
-					this.pageOneVisible = false;
-					this.pageTwoVisible = false;
-					this.pageThreeVisible = false;
-					this.pageFourVisible = false;
-					this.pageFiveVisible = false;
-				},
-				openList(e){
-					let key = e
-					this.arg = e
-				},
-				selectSex(item){
-					this.gender = item;
-					this.arg = null
-				},
-				selectProvince(item){
-					this.province = item.name;
-					this.province_id = item.id;
-					this.city_id = null;
-					this.arg = "city";
-				},
-				selectCity(item){
-					this.city_id = item.id
-					this.arg = null
-				},
-				getCareerStatus(e){
-					this.career_status = e;					
-					this.career_type = null;
-					this.work_experience = null;
-					this.grade_type = null;
-					this.school_year_enter = null;
-				},
-				selectGrade(item){
-					this.grade_type = item;
-					this.arg = null
-				},
-				selectSchoolYear(item){
-					this.school_year_enter = item
-					this.arg = null
-				},
-				selectCareerType(item){
-					this.career_type = item.name;
-					this.arg = null
-				},
-				selectWorkExperience(item){
-					this.work_experience = item.id;
-					this.arg = null
-				},
-				selectInterest(item){
-					let interestArr = this.interestArr;
-					let hasValue = false;
-					let tmpIndex = null;
-					interestArr.forEach((data,index) => {
-						let idArr = Number(data.split('-')[0]);
-						if(idArr === item.item_id){
-							hasValue = true;
-							tmpIndex = index;
-						}
-					});
-					if(hasValue){
-						interestArr.splice(tmpIndex,1)
-						this.interest_id.splice(tmpIndex,1)
-					}else if(interestArr.length < 3){
-						interestArr.push(item.item_id + '-' + 0);
-						this.interest_id.push(item.item_id)
+                    this.career_interest = html;
+                },
+                showFourthTemplete(){
+                    if(this.nextBtnThreeActive){
+                        this.pageVisible = 4;
+                    }
+                },
+                showFifthTemplete(){
+                    if(this.nextBtnFourActive){
+                        this.pageVisible = 5;
+                    }
+                },
+                closePage(e){
+                    this.maskVisible = false;
+                    this.pageOneVisible = false;
+                    this.pageTwoVisible = false;
+                    this.pageThreeVisible = false;
+                    this.pageFourVisible = false;
+                    this.pageFiveVisible = false;
+                },
+                openList(e){
+                    this.selectVisible = e
+                },
+                selectSex(item){
+                    this.gender = item;
+                    this.selectVisible = null
+                },
+                selectProvince(item){
+                    this.province = item.name;
+                    this.province_id = item.id;
+                    this.city_id = null;
+                    this.selectVisible = "city";
+                },
+                selectCity(item){
+                    this.city_id = item.id
+                    this.selectVisible = null
+                },
+                getCareerStatus(e){
+                    this.career_status = e;                 
+                    this.career_type = null;
+                    this.work_experience = null;
+                    this.grade_type = null;
+                    this.school_year_enter = null;
+                },
+                selectGrade(item){
+                    this.grade_type = item;
+                    this.selectVisible = null
+                },
+                selectSchoolYear(item){
+                    this.school_year_enter = item
+                    this.selectVisible = null
+                },
+                selectCareerType(item){
+                    this.career_type = item.name;
+                    this.selectVisible = null
+                },
+                selectWorkExperience(item){
+                    this.work_experience = item.id;
+                    this.selectVisible = null
+                },
+                selectInterest(item){
+                    let interestArr = this.interestArr;
+                    let hasValue = false;
+                    let tmpIndex = null;
+                    interestArr.forEach((data,index) => {
+                        let idArr = Number(data.split('-')[0]);
+                        if(idArr === item.item_id){
+                            hasValue = true;
+                            tmpIndex = index;
+                        }
+                    });
+                    if(hasValue){
+                        interestArr.splice(tmpIndex,1)
+                        this.interest_id.splice(tmpIndex,1)
+                    }else if(interestArr.length < 3){
+                        interestArr.push(item.item_id + '-' + 0);
+                        this.interest_id.push(item.item_id)
 
-					}
-				},
-				selectLevel(item,data,l_index){
-					item.level = l_index + 1;
-					item.lineActive = l_index + 1;
-					let hesSelected = false;
-					let tmpIndex = null;
-					this.interestArr.map((data,index) =>{
-						let interestId = Number(data.split('-')[0])
-						let levelId = data.split('-')[1]
-						if(item.id === interestId){
-							hesSelected = true;
-							tmpIndex = index
-						}
-					})
-					if(hesSelected){
-						this.interestArr.splice(tmpIndex,1,item.id+'-'+item.level)	
-					}
-					console.log(this.interestArr)
-				},
-				interestLevelLineOver(i_index,l_index,item){
-					item.lineActive = l_index + 1;
-				},
-				interestLevelLineOut(item){
-					item.lineActive = item.level;
-				},
-				dynamicCodeSend(){
-					let  myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
-					let  myreg2 = /^\d{4}$/;
-					let phoneNumberFlag = myreg.test(this.phoneNumber);
-					let verifyCodeFlag = myreg2.test(this.verifyCode)
-					if(this.phoneNumber == null){
-						this.phoneNumberHint = '不能为空';
-					}else{
-						if(phoneNumberFlag){
-							this.phoneNumberHint = ''
-						}else{
-							this.phoneNumberHint = '输入错误'
-						}
-					};
-					if(this.verifyCode == null){
-						this.verifyCodeHint = '不能为空';
-					}else{
-						if(verifyCodeFlag){
-							this.verifyCodeHint = ''
-						}else{
-							this.verifyCodeHint = '输入错误'
-						}
-					};
-					if(phoneNumberFlag && verifyCodeFlag){
-						this.countDown();
-					}
-				},
-				countDown(){
-					let count = 60;
-					var st = setInterval(()=>{
-						if (count > 1) {
-							count --;
-							let dynamicCodeSendCount =  '已发送'+'' + '(' + count + ')';
-							this.dynamicCodeHint = dynamicCodeSendCount;
-							this.btnDisabled = true
-						}else{
-							clearInterval(st);
-							this.dynamicCodeHint = '获取';
-							this.btnDisabled = false
-						}
-					},1000);
-				}
-			}
-		})
-	</script>
+                    }
+                },
+                selectLevel(item,data,l_index){
+                    item.level = l_index + 1;
+                    item.lineActive = l_index + 1;
+                    let hesSelected = false;
+                    let tmpIndex = null;
+                    this.interestArr.map((data,index) =>{
+                        let interestId = Number(data.split('-')[0])
+                        let levelId = data.split('-')[1]
+                        if(item.id === interestId){
+                            hesSelected = true;
+                            tmpIndex = index
+                        }
+                    })
+                    if(hesSelected){
+                        this.interestArr.splice(tmpIndex,1,item.id+'-'+item.level)  
+                    }
+                },
+                interestLevelLineOver(i_index,l_index,item){
+                    item.lineActive = l_index + 1;
+                },
+                interestLevelLineOut(item){
+                    item.lineActive = item.level;
+                },
+                dynamicCodeSend(){
+                    let  phoneNumberReg = /^[1][3,4,5,7,8][0-9]{9}$/;
+                    let  verifyCodeReg = /^\d{4}$/;
+                    let phoneNumberFlag = phoneNumberReg.test(this.phoneNumber);
+                    let verifyCodeFlag = verifyCodeReg.test(this.verifyCode)
+                    if(this.phoneNumber == null){
+                        this.phoneNumberHint = '不能为空';
+                    }else{
+                        if(phoneNumberFlag){
+                            this.phoneNumberHint = ''
+                        }else{
+                            this.phoneNumberHint = '输入错误'
+                        }
+                    };
+                    if(this.verifyCode == null){
+                        this.verifyCodeHint = '不能为空';
+                    }else{
+                        if(verifyCodeFlag){
+                            this.verifyCodeHint = ''
+                        }else{
+                            this.verifyCodeHint = '输入错误'
+                        }
+                    };
+                    if(phoneNumberFlag && verifyCodeFlag){
+                        this.countDown();
+                    }
+                },
+                countDown(){
+                    let count = 60;
+                    var st = setInterval(()=>{
+                        if (count > 1) {
+                            count --;
+                            let dynamicCodeSendCount =  '已发送'+'' + '(' + count + ')';
+                            this.dynamicCodeHint = dynamicCodeSendCount;
+                            this.dynamicCodeBtnDisabled = true
+                        }else{
+                            clearInterval(st);
+                            this.dynamicCodeHint = '获取';
+                            this.dynamicCodeBtnDisabled = false
+                        }
+                    },1000);
+                }
+            }
+        })
+    </script>
 </body>
 </html>
